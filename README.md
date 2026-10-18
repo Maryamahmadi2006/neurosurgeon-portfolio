@@ -2,6 +2,14 @@
 
 Responsive React + Vite portfolio with English, Dari, and Pashto language switching.
 
+**Live site:** https://maryamahmadi2006.github.io/neurosurgeon-portfolio/
+
+## Deployment
+The site is published with GitHub Pages. Every push to `main` triggers the
+`.github/workflows/deploy.yml` workflow, which builds the project and deploys
+the `dist` folder. The app uses `HashRouter`, so all routes are reachable at
+URLs like `#/about` and never return a 404.
+
 ## Requirements
 - Node.js 18 or newer
 - npm
@@ -18,12 +26,12 @@ Responsive React + Vite portfolio with English, Dari, and Pashto language switch
 
 4. Open the local URL shown by Vite.
 
-## Main routes
-- `/` — Home
-- `/about` — Professional profile, photos, credentials
-- `/services` — Service overview
-- `/appointment` — Demonstration appointment form (no backend; does not send or store information)
-- `/contact` — Clinic contact information
+## Main routes (hash-based, e.g. `.../#/about`)
+- `#/` — Home
+- `#/about` — Professional profile, photos, credentials
+- `#/services` — Service overview
+- `#/appointment` — Demonstration appointment form (no backend; does not send or store information)
+- `#/contact` — Clinic contact information
 
 ## Notes
 - The home hero uses `public/images/doctor-cutout.png`, cropped to the visible portrait so the transparent margins do not make the image appear tiny.
