@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../i18n';
 import Reveal from '../components/Reveal';
 
+// Public assets must be prefixed with Vite's BASE_URL so they resolve
+// correctly both locally and when hosted from a GitHub Pages sub-path.
+const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 const gallery = [
-  { src: '/images/doctor-consultation.jpg', alt: 'Doctor seated in a consultation room', key: 'consultation' },
-  { src: '/images/doctor-conference.jpg', alt: 'Doctor attending a professional conference', key: 'conference' },
-  { src: '/images/doctor-reviewing-scans.jpg', alt: 'Doctor reviewing medical scans and documents', key: 'review' },
-  { src: '/images/doctor-office.jpg', alt: 'Doctor in his office', key: 'office' },
+  { src: asset('images/doctor-consultation.jpg'), alt: 'Doctor seated in a consultation room', key: 'consultation' },
+  { src: asset('images/doctor-conference.jpg'), alt: 'Doctor attending a professional conference', key: 'conference' },
+  { src: asset('images/doctor-reviewing-scans.jpg'), alt: 'Doctor reviewing medical scans and documents', key: 'review' },
+  { src: asset('images/doctor-office.jpg'), alt: 'Doctor in his office', key: 'office' },
 ];
 
 export default function About() {
@@ -62,7 +66,7 @@ export default function About() {
   return <div className="about-page-clean">
     <section className="about-intro section-wrap">
       <Reveal className="about-intro-copy"><div className="eyebrow"><span />{t.about.eyebrow}</div><h1>{t.about.title}</h1><p>{t.about.desc}</p><div className="about-intro-note"><ShieldCheck size={19} /><span>{copy.profileLead}</span></div></Reveal>
-      <Reveal className="about-intro-image" delay={.12}><div className="about-image-backdrop" /><img src="/images/doctor-cutout.png" alt="Dr. Khalid Khan Zadran" /><div className="about-image-caption"><span className="about-caption-icon"><Stethoscope size={20} /></span><span><strong>Dr. Khalid Khan Zadran</strong><small>{t.hero.specialist}</small></span></div></Reveal>
+      <Reveal className="about-intro-image" delay={.12}><div className="about-image-backdrop" /><img src={asset('images/doctor-cutout.png')} alt="Dr. Khalid Khan Zadran" /><div className="about-image-caption"><span className="about-caption-icon"><Stethoscope size={20} /></span><span><strong>Dr. Khalid Khan Zadran</strong><small>{t.hero.specialist}</small></span></div></Reveal>
     </section>
 
     <section className="about-profile-section section-wrap">

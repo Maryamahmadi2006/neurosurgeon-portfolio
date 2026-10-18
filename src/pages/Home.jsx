@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
 import { useLanguage } from '../i18n';
 
+// Public assets must be prefixed with Vite's BASE_URL so they resolve
+// correctly both locally and when hosted from a GitHub Pages sub-path.
+const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 const quickIcons = [Brain, Activity, Waves, ShieldCheck];
 
 export default function Home() {
@@ -37,7 +41,7 @@ export default function Home() {
       <motion.div className="doctor-visual doctor-cutout-visual" initial={reduceMotion ? false : { opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .1, ease: [.22, 1, .36, 1] }}>
         <div className="doctor-halo" />
         <div className="doctor-ring" />
-        <img src="/images/doctor-cutout.png" alt="Dr. Khalid Khan Zadran, neurosurgeon" fetchPriority="high" />
+        <img src={asset('images/doctor-cutout.png')} alt="Dr. Khalid Khan Zadran, neurosurgeon" fetchPriority="high" />
       </motion.div>
 
       <motion.aside className="credential-stack" initial={reduceMotion ? false : { opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .55, delay: .3 }} aria-label="Professional overview">
@@ -71,7 +75,7 @@ export default function Home() {
         </Reveal>
         <Reveal className="brain-art brain-art-large" delay={.1}>
           <div className="brain-rings" aria-hidden="true" />
-          <img src="/images/brain.jpg" alt="Illustration of the human brain and nervous system" loading="lazy" />
+          <img src={asset('images/brain.jpg')} alt="Illustration of the human brain and nervous system" loading="lazy" />
           <div className="brain-art-caption"><span />{lang === 'fa' ? 'مغز و سیستم عصبی' : lang === 'ps' ? 'مغز او عصبي سیستم' : 'BRAIN & NERVOUS SYSTEM'}</div>
         </Reveal>
         <Reveal className="expertise-panel expertise-panel-large" delay={.18}>
