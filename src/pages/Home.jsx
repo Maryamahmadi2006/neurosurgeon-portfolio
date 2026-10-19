@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowDown, ArrowRight, Activity, Brain, ShieldCheck, Waves, Mouse, Stethoscope, HeartPulse } from 'lucide-react';
+import { ArrowDown, ArrowRight, Activity, Brain, ShieldCheck, Waves, Mouse, HeartPulse } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
 import { useLanguage } from '../i18n';
@@ -13,43 +13,60 @@ const quickIcons = [Brain, Activity, Waves, ShieldCheck];
 export default function Home() {
   const { t, lang } = useLanguage();
   const reduceMotion = useReducedMotion();
-  const motionProps = reduceMotion ? {} : { initial: { opacity: 0, y: 18 }, animate: { opacity: 1, y: 0 } };
+  // Staggered fade-in, mirroring the reference video: ambience first, then
+  // headline, paragraph, buttons and finally the floating credential chip.
+  const appear = (delay, duration = .6) => reduceMotion
+    ? { initial: false }
+    : { initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 }, transition: { duration, delay, ease: [.22, 1, .36, 1] } };
   const labels = lang === 'fa'
     ? { name: 'داکتر خالد خان زدران', scroll: 'برای ادامه پایین بروید', services: 'خدمات و حوزه‌های مراقبت', bookingEyebrow: 'مشاوره شخصی', bookingTitle: 'برای گام بعدی آماده‌اید؟', bookingDesc: 'برای درخواست وقت ملاقات، فورم آنلاین را تکمیل کنید.', bookingButton: 'درخواست وقت ملاقات' }
     : lang === 'ps'
       ? { name: 'ډاکټر خالد خان ځدراڼ', scroll: 'د دوام لپاره ښکته لاړ شئ', services: 'خدمتونه او د پاملرنې برخې', bookingEyebrow: 'شخصي مشوره', bookingTitle: 'د بل ګام لپاره چمتو یاست؟', bookingDesc: 'د ملاقات غوښتلو لپاره آنلاین فورمه ډکه کړئ.', bookingButton: 'د ملاقات غوښتنه' }
       : { name: 'Dr. Khalid Khan Zadran', scroll: 'Scroll to explore', services: 'Services and areas of care', bookingEyebrow: 'PERSONALIZED CONSULTATION', bookingTitle: 'Ready to discuss your care?', bookingDesc: 'Request an appointment using the online form and share your preferred contact details.', bookingButton: 'Request an Appointment' };
 
-  return <>
-    <section className="hero-section hero-clean" aria-labelledby="hero-title">
-      <div className="hero-glow glow-one" aria-hidden="true" />
-      <div className="hero-glow glow-two" aria-hidden="true" />
-      <div className="hero-orbit orbit-one" aria-hidden="true" />
-      <div className="hero-orbit orbit-two" aria-hidden="true" />
-      <div className="hero-name-watermark" aria-hidden="true">{labels.name}</div>
+  // With HashRouter, href="#care" would be treated as a route change, so the
+  // scroll cue scrolls programmatically instead of touching the URL hash.
+  const scrollToCare = () => document.getElementById('care')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
 
-      <div className="hero-copy">
-        <motion.div className="eyebrow" {...motionProps} transition={{ duration: .55 }}><span />{t.hero.eyebrow}</motion.div>
-        <motion.h1 id="hero-title" {...motionProps} transition={{ duration: .65, delay: .08 }}>{t.hero.titleA}<em>{t.hero.titleB}</em></motion.h1>
-        <motion.p className="hero-desc" {...motionProps} transition={{ duration: .6, delay: .16 }}>{t.hero.desc}</motion.p>
-        <motion.div className="hero-buttons" {...motionProps} transition={{ duration: .6, delay: .23 }}>
-          <Link className="button button-primary" to="/appointment">{t.hero.request}<ArrowRight size={17} /></Link>
-          <Link className="button button-outline" to="/about">{t.hero.learn}</Link>
-        </motion.div>
+  return <>
+    <section className="hero-section hero-v2" aria-labelledby="hero-title">
+      <div className="hero-v2-ambience" aria-hidden="true">
+        <span className="hero-bloom bloom-one" />
+        <span className="hero-bloom bloom-two" />
+        <span className="hero-bloom bloom-three" />
+        <span className="hero-light-band" />
       </div>
 
-      <motion.div className="doctor-visual doctor-cutout-visual" initial={reduceMotion ? false : { opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .1, ease: [.22, 1, .36, 1] }}>
-        <div className="doctor-halo" />
-        <div className="doctor-ring" />
-        <img src={asset('images/doctor-cutout.png')} alt="Dr. Khalid Khan Zadran, neurosurgeon" fetchPriority="high" />
-      </motion.div>
+      <div className="hero-v2-inner">
+        <div className="hero-copy">
+          <motion.div className="eyebrow hero-eyebrow-pill" {...appear(.3, .5)}><span />{t.hero.eyebrow}</motion.div>
+          <motion.h1 id="hero-title" {...appear(.4, .7)}>{t.hero.titleA}<em>{t.hero.titleB}</em></motion.h1>
+          <motion.p className="hero-desc" {...appear(.58)}>{t.hero.desc}</motion.p>
+          <motion.div className="hero-buttons" {...appear(.7)}>
+            <Link className="button button-primary" to="/appointment">{t.nav.book}</Link>
+            <Link className="button button-outline" to="/services">{t.nav.services}</Link>
+          </motion.div>
+        </div>
 
-      <motion.aside className="credential-stack" initial={reduceMotion ? false : { opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .55, delay: .3 }} aria-label="Professional overview">
-        <div><Brain /><p><strong>{t.hero.credentials}</strong><span>{t.hero.neurosurgery}</span></p></div>
-        <div><Stethoscope /><p><strong>{t.hero.specialist}</strong><span>Brain &amp; Spine</span></p></div>
-        <div><ShieldCheck /><p><strong>{t.hero.patient}</strong><span>{t.hero.approach}</span></p></div>
-      </motion.aside>
-      <a className="scroll-cue" href="#care"><Mouse size={20} /><span>{labels.scroll}</span><ArrowDown size={17} /></a>
+        <div className="hero-v2-visual">
+          <motion.div
+            className="hero-glass-card"
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.035 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: .9, delay: .08, ease: [.22, 1, .36, 1] }}
+          >
+            <img src={asset('images/doctor-cutout.png')} alt="Dr. Khalid Khan Zadran, neurosurgeon" fetchPriority="high" />
+            <span className="hero-card-sheen" aria-hidden="true" />
+          </motion.div>
+
+          <motion.aside className="hero-stat-chip" {...appear(.95, .55)} aria-label={t.hero.specialist}>
+            <span className="hero-stat-icon"><Brain size={18} strokeWidth={1.7} /></span>
+            <p><strong>{t.hero.credentials}</strong><span>{t.hero.neurosurgery}</span></p>
+          </motion.aside>
+        </div>
+      </div>
+
+      <motion.button type="button" className="scroll-cue" onClick={scrollToCare} {...appear(1.1, .5)}><Mouse size={19} /><span>{labels.scroll}</span><ArrowDown size={16} /></motion.button>
     </section>
 
     <section className="quick-services-band" aria-label={labels.services}>
